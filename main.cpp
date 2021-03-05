@@ -1,20 +1,19 @@
-
+#include <fstream>
 #include <vector>
 #include <string>
 #include <iostream>
 #include <algorithm>
 using namespace std;
 
-void lzw(vector<string> &dicionario)
+void lzw(vector<string> &dicionario, string str)
 {
-    string teste = "bananabanabofana";
     string result;
     string p;
     string c;
-    for (int i = 0; i < teste.size(); i++)
+    for (int i = 0; i < str.size(); i++)
     {
         c = "";
-        c.push_back(teste.at(i));
+        c.push_back(str.at(i));
         string pc = p + c;
         std::vector<string>::iterator it = find(dicionario.begin(), dicionario.end(), pc);
         if (it != dicionario.end())
@@ -28,7 +27,7 @@ void lzw(vector<string> &dicionario)
             if (it != dicionario.end())
             {
                 int index = it - dicionario.begin();
-                result = result + " " +  to_string(index);
+                result = result + " " + to_string(index);
             }
             p = c;
         }
@@ -37,7 +36,7 @@ void lzw(vector<string> &dicionario)
     if (it != dicionario.end())
     {
         int index = it - dicionario.begin();
-        result = result + " " +  to_string(index);
+        result = result + " " + to_string(index);
     }
     cout << result << endl;
 }
@@ -50,12 +49,25 @@ void asc2Add(vector<string> &vet)
     }
 }
 
-int main()
+string LeituraArquivo(ifstream &arq)
 {
+    string str;
+    if (arq.is_open())
+    {
+        getline(arq, str);
+    }
+    return str;
+}
 
+int main(int argc, char *argv[])
+{
+    ifstream arq;
+    string str;
     vector<string> dicionario;
+    arq.open(argv[1], ios::in);
+    str = LeituraArquivo(arq);
     asc2Add(dicionario);
-    lzw(dicionario);
+    lzw(dicionario, str);
 
     return 0;
 }
